@@ -20,4 +20,6 @@ class Category{
   final String title;
   final Color color;
   final Icon icon;
+
+
 }
