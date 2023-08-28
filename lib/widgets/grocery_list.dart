@@ -29,11 +29,21 @@ class _GroceryListState extends State<GroceryList> {
     final url = Uri.https(
         'flutter-shopping-list-e5a37-default-rtdb.europe-west1.firebasedatabase.app',
         '/shopping-list.json');
-    final response = await http.get(url);
-    if (response.statusCode >= 400) {
+  
+
+    try {
+        final response = await http.get(url);
+        if (response.statusCode >= 400) {
       setState(() {
         _error = 'Failed to fetch data. Please try again later.';
       });
+    }
+
+    if (response.body == 'null') {
+      setState(() {
+        _isLoading = false;
+      });
+      return;
     }
 
     final Map<String, dynamic> listData = json.decode(response.body);
@@ -56,6 +66,11 @@ class _GroceryListState extends State<GroceryList> {
       _groceryItems = loadedItems;
       _isLoading = false;
     });
+  } catch (error){
+      setState(() {
+        _error = 'Please try again later.';
+      });
+    }
   }
 
   void _addItem() async {
@@ -162,4 +177,4 @@ class _GroceryListState extends State<GroceryList> {
       body: mainContent,
     );
   }
-}
+  }
